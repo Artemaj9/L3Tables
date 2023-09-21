@@ -16,17 +16,22 @@ class ViewController: UIViewController {
         table.dataSource = self
         table.delegate = self
         table.separatorStyle = .none
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "Identifier")
+        //table.register(UITableViewCell.self, forCellReuseIdentifier: "Identifier")
+        table.register(UserTableViewCell.self, forCellReuseIdentifier: UserTableViewCell.reuseIdentifier)
+        table.estimatedRowHeight = 140
         return table
     }()
     
-    var dataSource: [String] = []
+    var dataSource: [User] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .purple
-        dataSource = ["Hello", "World", "You", "My", "Wonderwall","Hello", "World", "You", "My", "Wonderwall","Hello", "World", "You", "My", "Wonderwall","Hello", "World", "You", "My", "Wonderwall","Hello", "World", "You", "My", "Wonderwall"]
+        dataSource = Array(repeating: User(name: "Den",
+                                           lastName: "Koltrein",
+                                           age: "32",
+                                           avatarImage: UIImage(named: "Zvezdopad")), count: 30)
         view.addSubview(tableView)
         setupLayout()
     }
@@ -50,22 +55,26 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Identifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: UserTableViewCell.reuseIdentifier, for: indexPath) as! UserTableViewCell
         
-        let model = dataSource[indexPath.row]
-        var listConfiguration = cell.defaultContentConfiguration()
-        var backgroundConfiguration = cell.defaultBackgroundConfiguration()
-        backgroundConfiguration.backgroundColor =  .brown
-        backgroundConfiguration.cornerRadius = 10
-        backgroundConfiguration.backgroundInsets = .init(top: 5, leading: 5, bottom: 5, trailing: 5)
-        listConfiguration.text =  model
-        listConfiguration.secondaryTextProperties.color = .purple
-        listConfiguration.secondaryText = "secondary Text"
-        cell.contentConfiguration = listConfiguration
-        cell.backgroundConfiguration = backgroundConfiguration
+        
+        let user = dataSource[indexPath.row]
+        cell.configureCell(with: user)
+            
+        
+//        let model = dataSource[indexPath.row]
+//        var listConfiguration = cell.defaultContentConfiguration()
+//        var backgroundConfiguration = cell.defaultBackgroundConfiguration()
+//        backgroundConfiguration.backgroundColor =  .brown
+//        backgroundConfiguration.cornerRadius = 10
+//        backgroundConfiguration.backgroundInsets = .init(top: 5, leading: 5, bottom: 5, trailing: 5)
+//        listConfiguration.text =  model
+//        listConfiguration.secondaryTextProperties.color = .purple
+//        listConfiguration.secondaryText = "secondary Text"
+//        cell.contentConfiguration = listConfiguration
+//        cell.backgroundConfiguration = backgroundConfiguration
         
         return cell
     }
-    
 }
 
